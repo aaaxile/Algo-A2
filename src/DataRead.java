@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 public class DataRead {
@@ -33,16 +35,16 @@ public class DataRead {
 		JSONTokener tokener = new JSONTokener(is);
 		JSONObject toutJson = new JSONObject(tokener);
 
-		List<String> stationsId = DataRead.stationsInterpretation(toutJson); // Stations de 1 à 501
-		Map<String, ArrayList<ArrayList<String>>> lignes = DataRead.lignesInterpretation(toutJson); // Arrets par ligne
-		Set<String> keyList = DataRead.listeDesKeys(lignes); // Liste des clés (numéros de ligne)
+		stationsId = stationsInterpretation(toutJson); // Stations de 1 à 501
+		Map<String, ArrayList<ArrayList<String>>> lignes = lignesInterpretation(toutJson); // Arrets par ligne
+		Set<String> keyList = listeDesKeys(lignes); // Liste des clés (numéros de ligne)
 
 		JSONArray correspJson = toutJson.getJSONArray("corresp");
 		ArrayList<ArrayList<String>> correspondances = correspInterpretation(correspJson); // liste des correspondances
 
 		JSONArray routesJson = toutJson.getJSONArray("routes");
 
-		DataRead.AdjMatrix = adjMatrix(stationsId, lignes, correspondances);
+		AdjMatrix = adjMatrix(stationsId, lignes, correspondances);
 
 		/*
 		 * Coucou celui ou celle qui reprendra ce code, je sais que c'est chiant de
@@ -182,13 +184,6 @@ public class DataRead {
 				}
 			}
 		}
-
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[i].length; j++) {
-				System.out.print(matrix[i][j] + " ");
-			}
-			System.out.println();
-		}
 		return matrix;
 
 	}
@@ -220,7 +215,7 @@ public class DataRead {
                     if(matrix[x-1][i] == 1 && visited[i] == false){
                         queue.add(i+1);
                         visited[i] = true;
-                        System.out.println(visited[i]);
+                        //System.out.println(visited[i]);
                         prev.put((i+1), i); // si ne fonctionne pas remplacer i+1 par i-1
                     }
                 }
