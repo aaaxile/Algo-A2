@@ -193,7 +193,7 @@ public class DataRead {
 
 		Map<Integer, Integer> prev = new HashMap<Integer, Integer>();
         boolean visited[] = new boolean[matrix.length];
-        visited[start-1] = true;
+        visited[start] = true;
   
         Queue<Integer> queue = new LinkedList<>(); 
         queue.add(start);
@@ -206,38 +206,38 @@ public class DataRead {
         { 
         	int x = queue.poll();	//retire x de la queue
         	int i;
-            
+            current = x;
         	if (current==finish){
+        		System.out.println("TRUC");
         		return tracebackPath(current, prev);
                 //break;
             }else{
-            	for(i=0; i<matrix.length;i++){
+            	for(i=0; i<matrix.length-1;i++){
                     if(matrix[x-1][i] == 1 && visited[i] == false){
                         queue.add(i+1);
                         visited[i] = true;
-                        //System.out.println(visited[i]);
-                        prev.put((i+1), i); // si ne fonctionne pas remplacer i+1 par i-1
+                        System.out.println("x : " +x+ " i : "+i);
+                        prev.put((i+1), i); 
                     }
                 }
             }
   
             
         }
-        
-        
-        
-        
+
+        System.out.println("Pas de lien entre les deux stations");
 		return 0;
 	}
 	
 	public static int tracebackPath(int target, Map<Integer, Integer> prev1) {	//Recupere le path a partir du finish
-        List<Integer> s = new LinkedList<Integer>();
+        List<Integer> stationsparcourues = new LinkedList<Integer>();
         Integer u = target;
         while(prev1.get(u) != null){
-            s.add(u);
+        	stationsparcourues.add(u);
             u = prev1.get(u);
         }
-        return s.size();
+        System.out.println("size = " +stationsparcourues.size());
+        return stationsparcourues.size();
     }
 
 }
