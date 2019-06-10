@@ -18,6 +18,7 @@ public class DataRead {
 
 	static int[][] AdjMatrix;
 	static List<String> stationsId; 
+	static HashMap<String, String> stationsNames ;
 
 	public static InputStream readJsonFile() throws JSONException {
 
@@ -45,41 +46,33 @@ public class DataRead {
 		JSONArray routesJson = toutJson.getJSONArray("routes");
 
 		AdjMatrix = adjMatrix(stationsId, lignes, correspondances);
+		stationsNames = stationsNamesInterpretation(toutJson);
 
-		/*
-		 * Coucou celui ou celle qui reprendra ce code, je sais que c'est chiant de
-		 * reprendre le code d'un autre donc j'ai essayé d'expliquer un maximum, et je
-		 * vais essayer d'approfondir un peu ici. Déjà, tu es un amour. Ensuite, t'as
-		 * stationsId, lignes et keyList à ta disposition, normalement c'est suffisant
-		 * pour faire la matrice, mais elle ne sera pas complète tant que "correspJson"
-		 * n'aura pas été traité aussi. Mais tout d'abord va falloir créer une grosse
-		 * matrice de 502 zeros de long et de large Ensuite, en gros, de ce que j'ai
-		 * compris, il va falloir faire la boucle suivante : -Prendre l'arret d'une
-		 * ligne (en commencant par le premier) et regarder l'arret suivant. (Par
-		 * exemple 1865 et 2156 sont les deux Id d'arrets) -Prendre la valeur comprise
-		 * entre 0 et 501 de ces deux arrets grâce à "stationsId" (par exemple imaginons
-		 * que 12 et 85 sont les équivalents de 1865 et 2156) -Mettre un 1 à la place du
-		 * 0 aux deux endroits correspondant dans la matrice (Donc à matrice[12][85] et
-		 * matrice[85][12]) -Et voala Ensuite il faudra aussi s'occuper de lier les
-		 * correspondances de la même facon mais ca devrait pas être trop long, surtout
-		 * que vous êtes trop forts. Je suis désolé si ca sonne condescendant ou quoi,
-		 * c'est pas du tout mon intention, je veux juste aider si tu es perdu 0:) Merci
-		 * beaucoup, je suis désolé de pas avoir pu faire plus, j'ai vraiment begayé sur
-		 * des trucs tout cons, j'essayerai d'aider pour le word et le ppt comme je peux
-		 * :3 Love <3
-		 */
 	}
 
 	public static List<String> stationsInterpretation(JSONObject toutJson) throws JSONException {
 		JSONObject stationsJson = toutJson.getJSONObject("stations");
 
-		List<String> stationsId = new ArrayList<>(); // Les stations ont normalement des ID cheloues
+		List<String> stationsId = new ArrayList<>(); 
 		Iterator<String> stationsKeys = stationsJson.keys(); // On crée une liste dans laquelle on stock tous ces ID
 		while (stationsKeys.hasNext()) { // Ainsi, on peut se rapporter à cette table pour avoir des id allant de 0 à
 											// 501
 			String key = stationsKeys.next(); // pour faciliter la prog, tout en conservant un lien avec l'ID réel d'une
 												// station
 			stationsId.add(key);
+		}
+		return stationsId;
+	}
+	
+	public static HashMap<String, String> stationsNamesInterpretation(JSONObject toutJson) throws JSONException {
+		JSONObject stationsJson = toutJson.getJSONObject("stations");
+
+		HashMap<String, String> stationsId = new HashMap<>(); 
+		Iterator<String> stationsKeys = stationsJson.keys(); 
+		while (stationsKeys.hasNext()) { 
+			String key = stationsKeys.next(); 
+			String name = stationsJson.getJSONObject(key).getString("nom");
+			stationsId.put(key, name);
 		}
 		return stationsId;
 	}
@@ -121,8 +114,8 @@ public class DataRead {
 				if (jsonArray != null) {
 					for (int i = 0; i < jsonArray.length(); i++) {
 						ArrayList<String> listTemp2 = new ArrayList<String>();
-						JSONArray jsonArray2 = (JSONArray) jsonArray.get(i); // Gros micmac pour se retrouver avec un
-						if (jsonArray2 != null) { // listTemp en array d'array de string, sans jsons :D
+						JSONArray jsonArray2 = (JSONArray) jsonArray.get(i); 
+						if (jsonArray2 != null) { 
 							for (int j = 0; j < jsonArray2.length(); j++) {
 								listTemp2.add(jsonArray2.get(j).toString());
 							}
@@ -187,57 +180,5 @@ public class DataRead {
 		return matrix;
 
 	}
-	
-	
-	public static int rechercheItineraire(int[][] matrix, int start, int finish){
-
-		Map<Integer, Integer> prev = new HashMap<Integer, Integer>();
-        boolean visited[] = new boolean[matrix.length];
-        visited[start-1] = true;
-  
-        Queue<Integer> queue = new LinkedList<>(); 
-        queue.add(start);
-        // Mark the current node as visited and enqueue it
-        int current = start;
-        //visited[current]=true; 
-        //queue.add(current); 
-  
-        while (queue.size() != 0) 
-        { 
-        	int x = queue.poll();	//retire x de la queue
-        	int i;
-            
-        	if (current==finish){
-        		return tracebackPath(current, prev);
-                //break;
-            }else{
-            	for(i=0; i<matrix.length;i++){
-                    if(matrix[x-1][i] == 1 && visited[i] == false){
-                        queue.add(i+1);
-                        visited[i] = true;
-                        //System.out.println(visited[i]);
-                        prev.put((i+1), i); // si ne fonctionne pas remplacer i+1 par i-1
-                    }
-                }
-            }
-  
-            
-        }
-        
-        
-        
-        
-		return 0;
-	}
-	
-	public static int tracebackPath(int target, Map<Integer, Integer> prev1) {	//Recupere le path a partir du finish
-        List<Integer> s = new LinkedList<Integer>();
-        Integer u = target;
-        while(prev1.get(u) != null){
-            s.add(u);
-            u = prev1.get(u);
-        }
-        return s.size();
-    }
 
 }
