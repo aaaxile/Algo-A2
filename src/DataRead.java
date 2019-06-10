@@ -29,13 +29,13 @@ public class DataRead {
 	}
 
 	public static void dataInterpretation() throws JSONException {
-		InputStream is = DataRead.readJsonFile(); // On récupère toutes les données du Json
+		InputStream is = DataRead.readJsonFile(); // On rÃ©cupÃ¨re toutes les donnÃ©es du Json
 		JSONTokener tokener = new JSONTokener(is);
 		JSONObject toutJson = new JSONObject(tokener);
 
-		List<String> stationsId = DataRead.stationsInterpretation(toutJson); // Stations de 1 à 501
+		List<String> stationsId = DataRead.stationsInterpretation(toutJson); // Stations de 1 Ã  501
 		Map<String, ArrayList<ArrayList<String>>> lignes = DataRead.lignesInterpretation(toutJson); // Arrets par ligne
-		Set<String> keyList = DataRead.listeDesKeys(lignes); // Liste des clés (numéros de ligne)
+		Set<String> keyList = DataRead.listeDesKeys(lignes); // Liste des clÃ©s (numÃ©ros de ligne)
 
 		JSONArray correspJson = toutJson.getJSONArray("corresp");
 		ArrayList<ArrayList<String>> correspondances = correspInterpretation(correspJson); // liste des correspondances
@@ -46,23 +46,23 @@ public class DataRead {
 
 		/*
 		 * Coucou celui ou celle qui reprendra ce code, je sais que c'est chiant de
-		 * reprendre le code d'un autre donc j'ai essayé d'expliquer un maximum, et je
-		 * vais essayer d'approfondir un peu ici. Déjà, tu es un amour. Ensuite, t'as
-		 * stationsId, lignes et keyList à ta disposition, normalement c'est suffisant
-		 * pour faire la matrice, mais elle ne sera pas complète tant que "correspJson"
-		 * n'aura pas été traité aussi. Mais tout d'abord va falloir créer une grosse
+		 * reprendre le code d'un autre donc j'ai essayÃ© d'expliquer un maximum, et je
+		 * vais essayer d'approfondir un peu ici. DÃ©jÃ , tu es un amour. Ensuite, t'as
+		 * stationsId, lignes et keyList Ã  ta disposition, normalement c'est suffisant
+		 * pour faire la matrice, mais elle ne sera pas complÃ¨te tant que "correspJson"
+		 * n'aura pas Ã©tÃ© traitÃ© aussi. Mais tout d'abord va falloir crÃ©er une grosse
 		 * matrice de 502 zeros de long et de large Ensuite, en gros, de ce que j'ai
 		 * compris, il va falloir faire la boucle suivante : -Prendre l'arret d'une
 		 * ligne (en commencant par le premier) et regarder l'arret suivant. (Par
 		 * exemple 1865 et 2156 sont les deux Id d'arrets) -Prendre la valeur comprise
-		 * entre 0 et 501 de ces deux arrets grâce à "stationsId" (par exemple imaginons
-		 * que 12 et 85 sont les équivalents de 1865 et 2156) -Mettre un 1 à la place du
-		 * 0 aux deux endroits correspondant dans la matrice (Donc à matrice[12][85] et
+		 * entre 0 et 501 de ces deux arrets grÃ¢ce Ã  "stationsId" (par exemple imaginons
+		 * que 12 et 85 sont les Ã©quivalents de 1865 et 2156) -Mettre un 1 Ã  la place du
+		 * 0 aux deux endroits correspondant dans la matrice (Donc Ã  matrice[12][85] et
 		 * matrice[85][12]) -Et voala Ensuite il faudra aussi s'occuper de lier les
-		 * correspondances de la même facon mais ca devrait pas être trop long, surtout
-		 * que vous êtes trop forts. Je suis désolé si ca sonne condescendant ou quoi,
+		 * correspondances de la mÃªme facon mais ca devrait pas Ãªtre trop long, surtout
+		 * que vous Ãªtes trop forts. Je suis dÃ©solÃ© si ca sonne condescendant ou quoi,
 		 * c'est pas du tout mon intention, je veux juste aider si tu es perdu 0:) Merci
-		 * beaucoup, je suis désolé de pas avoir pu faire plus, j'ai vraiment begayé sur
+		 * beaucoup, je suis dÃ©solÃ© de pas avoir pu faire plus, j'ai vraiment begayÃ© sur
 		 * des trucs tout cons, j'essayerai d'aider pour le word et le ppt comme je peux
 		 * :3 Love <3
 		 */
@@ -72,10 +72,10 @@ public class DataRead {
 		JSONObject stationsJson = toutJson.getJSONObject("stations");
 
 		List<String> stationsId = new ArrayList<>(); // Les stations ont normalement des ID cheloues
-		Iterator<String> stationsKeys = stationsJson.keys(); // On crée une liste dans laquelle on stock tous ces ID
-		while (stationsKeys.hasNext()) { // Ainsi, on peut se rapporter à cette table pour avoir des id allant de 0 à
+		Iterator<String> stationsKeys = stationsJson.keys(); // On crÃ©e une liste dans laquelle on stock tous ces ID
+		while (stationsKeys.hasNext()) { // Ainsi, on peut se rapporter Ã  cette table pour avoir des id allant de 0 Ã 
 											// 501
-			String key = stationsKeys.next(); // pour faciliter la prog, tout en conservant un lien avec l'ID réel d'une
+			String key = stationsKeys.next(); // pour faciliter la prog, tout en conservant un lien avec l'ID rÃ©el d'une
 												// station
 			stationsId.add(key);
 		}
@@ -93,10 +93,10 @@ public class DataRead {
 																												// objets
 																												// contenant
 																												// les
-																												// différentes
+																												// diffÃ©rentes
 																												// listes
 																												// d'arrets
-																												// à la
+																												// Ã  la
 																												// ligne
 																												// de
 																												// metro
@@ -105,15 +105,15 @@ public class DataRead {
 
 		while (lignesKeys.hasNext()) {
 			String key = lignesKeys.next();
-			if (!key.equals("0")) { // On ne veut pas récupérer la ligne "0" qui n'est pas une vraie ligne
-				JSONObject objTempJson = lignesJson.getJSONObject(key); // Objet temporaire qui nous permet de récupérer
+			if (!key.equals("0")) { // On ne veut pas rÃ©cupÃ©rer la ligne "0" qui n'est pas une vraie ligne
+				JSONObject objTempJson = lignesJson.getJSONObject(key); // Objet temporaire qui nous permet de rÃ©cupÃ©rer
 																		// une ligne sous forme d'objet JSON
-				JSONArray arrayTempJson = objTempJson.getJSONArray("arrets"); // Array temp qui récupère juste la partie
-																				// "arrets" de l'objet précédent
+				JSONArray arrayTempJson = objTempJson.getJSONArray("arrets"); // Array temp qui rÃ©cupÃ¨re juste la partie
+																				// "arrets" de l'objet prÃ©cÃ©dent
 																				// Les arrayJSON se comportent comme des
 																				// ObjetsJava
 				ArrayList<ArrayList<String>> listTemp = new ArrayList<ArrayList<String>>(); // liste temp d'objets
-																							// équivalents à l'array
+																							// Ã©quivalents Ã  l'array
 																							// json temporaire au dessus
 				JSONArray jsonArray = (JSONArray) arrayTempJson;
 				if (jsonArray != null) {
@@ -135,7 +135,7 @@ public class DataRead {
 	}
 
 	public static Set<String> listeDesKeys(Map<String, ArrayList<ArrayList<String>>> lignes) { // Ressort la liste des
-																								// clés (numéros de
+																								// clÃ©s (numÃ©ros de
 																								// lignes)
 		Set<String> keyList = new HashSet<String>();
 		for (String key : lignes.keySet()) {
@@ -192,5 +192,57 @@ public class DataRead {
 		return matrix;
 
 	}
+	
+	
+	public static int rechercheItineraire(int[][] matrix, int start, int finish){
+
+		Map<Integer, Integer> prev = new HashMap<Integer, Integer>();
+        boolean visited[] = new boolean[matrix.length];
+        visited[start-1] = true;
+  
+        Queue<Integer> queue = new LinkedList<>(); 
+        queue.add(start);
+        // Mark the current node as visited and enqueue it
+        int current = start;
+        //visited[current]=true; 
+        //queue.add(current); 
+  
+        while (queue.size() != 0) 
+        { 
+        	int x = queue.poll();	//retire x de la queue
+        	int i;
+            
+        	if (current==finish){
+        		return tracebackPath(current, prev);
+                //break;
+            }else{
+            	for(i=0; i<matrix.length;i++){
+                    if(matrix[x-1][i] == 1 && visited[i] == false){
+                        queue.add(i+1);
+                        visited[i] = true;
+                        System.out.println(visited[i]);
+                        prev.put((i+1), i); // si ne fonctionne pas remplacer i+1 par i-1
+                    }
+                }
+            }
+  
+            
+        }
+        
+        
+        
+        
+		return 0;
+	}
+	
+	public static int tracebackPath(int target, Map<Integer, Integer> prev1) {	//Recupere le path a partir du finish
+        List<Integer> s = new LinkedList<Integer>();
+        Integer u = target;
+        while(prev1.get(u) != null){
+            s.add(u);
+            u = prev1.get(u);
+        }
+        return s.size();
+    }
 
 }
