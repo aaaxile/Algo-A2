@@ -10,8 +10,8 @@ public class main {
 		try {
 			DataRead.dataInterpretation();
 			String[] reponse = findLongestShortestPath(DataRead.AdjMatrix, DataRead.stationsId); 
-			System.out.println("Le diametre du graphe est " + reponse[2] + " stations : de la station " + DataRead.stationsNames.get(reponse[0])
-					+ " à la station " + DataRead.stationsNames.get(reponse[1]));
+			System.out.println("Graph diameter is " + reponse[2] + " stations : from station " + DataRead.stationsNames.get(reponse[0])
+					+ " to station " + DataRead.stationsNames.get(reponse[1]));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
